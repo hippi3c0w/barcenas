@@ -46,7 +46,7 @@ command=""
                         encrypt=`openssl aes-256-cbc -a -salt -in $input -out $output`
                         $encrypt
                         search=`ls | grep $output |wc -l`
-                                if [[ $search -eq 1 ]]; then
+                                if [[ $search -gt 1 ]]; then
                                         echo -e "[${GREEN}+${NC}] File $output encrypted successfully"
                                 else
                                         echo -e "[${RED}+${NC}] File $output not encrypted"
