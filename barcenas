@@ -1,0 +1,79 @@
+#!/bin/bash
+clear
+cat style
+#openssl aes-256-cbc -a -salt -in testFuckingFile.txt -out testFuckingFile.txt.enc
+#openssl aes-256-cbc -d -a -in testFuckingFile.txt.enc -out testFuckingFile.txt
+function usage()
+{
+echo ""
+echo "encrypt   -                Encryption of input file that user should specify after"
+#echo "input            -                Input file after encryption/decryption"
+echo "decrypt           -                Decrypt a encrypted file"
+echo "pp                -                Delete all the specific files. Fuck the Police"
+echo ""
+}
+
+#Color variables
+BLACK='\033[0;30m'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+ORANGE='\033[0;33m'
+PURPLE='\033[0;34m'
+CYAN='\033[0;35m'
+LIGHTGRAY='\033[0;36m'
+NC='\033[0m'
+DARKGRAY='\033[1;30m'
+LIGHTRED='\033[1;31m'
+LIGHTGREEN='\033[1;32m'
+LIGHTORANGE='\033[1;33m'
+LIGHTPURPLE='\033[1;34m'
+LIGHTCYAN='\033[1;35m'
+
+#creating a shell
+command=""
+        while [[ $command != "exit" ]]
+        do
+        read -p "Barcenas> " command
+        if [[ $command == help ]] ; then
+                usage
+        fi #fi of command option
+        op=`echo $command | cut -d " " -f1`
+                if [[ $op == encrypt ]];then
+                        read -p "Barcenas:~/encrypt/input_file# " input
+                        read -p "Barcenas:~/encrypt/output_file# " output
+                        echo -e "[${GREEN}+${NC}] Encrypting file $input -> $output"
+                        sleep 2
+                        encrypt=`openssl aes-256-cbc -a -salt -in $input -out $output`
+                        $encrypt
+                        search=`ls | grep $output |wc -l`
+                                if [[ $search -eq 1 ]]; then
+                                        echo -e "[${GREEN}+${NC}] File $output encrypted successfully"
+                                else
+                                        echo -e "[${RED}+${NC}] File $output not encrypted"
+                                fi #fi of search
+
+                fi # op encryption
+
+                if [[ $op == decrypt ]]; then
+                        read -p "Barcenas:~/deencrypt/input_file# " dinput
+                        read -p "Barcenas:~/deencrypt/output_file# " doutput
+                        echo -e "[${GREEN}+${NC}] Decrypting file $dinput -> $doutput"
+                        sleep 2
+                        decrypt=`openssl aes-256-cbc -d -a -in $dinput -out $doutput`
+                        $decrypt
+                        dsearch=`ls | grep $doutput |wc -l`
+                                if [[ $dsearch -eq 1 ]]; then
+                                        echo -e "[${GREEN}+${NC}] File $doutput decrypted successfully"
+                                else
+                                        echo -e "[${RED}+${NC}] File $doutput not decrypted"
+                                fi #fi of dsearch
+
+                fi #fi of decrypt
+
+                if [[ $op == pp ]]; then
+                        read -p "Barcenas:~/PP/Style# " file
+                        echo -e "[${GREEN}+${NC}] Deleting all the files that contains string $files. Welcome to PP style"
+                        sleep 2
+                        srm $file*
+                fi #fi of pp
+done
